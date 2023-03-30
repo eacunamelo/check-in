@@ -4,7 +4,7 @@ import { getFlight } from '../controllers/flight';
 const router = Router();
 
 
-router.get('/', getFlight);
+router.get('/:id', getFlight);
 
 
 export default router;

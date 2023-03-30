@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize';
 import db from '../db/connection';
+import Boarding_Pass from './boarding_pass';
 
 const Flight: any = db.define('flight', {
     flight_id: {
@@ -23,5 +24,8 @@ const Flight: any = db.define('flight', {
         type: DataTypes.INTEGER
     }
 });
+
+Flight.hasMany( Boarding_Pass, { foreignKey: 'flight_id', sourceKey: 'flight_id' });
+Boarding_Pass.belongsTo( Flight, { foreignKey: 'flight_id', targetKey: 'flight_id' });
 
 export default Flight;

@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../db/connection"));
-const boarding_pass_1 = __importDefault(require("./boarding_pass"));
 const Flight = connection_1.default.define('flight', {
     flight_id: {
         type: sequelize_1.DataTypes.INTEGER,
@@ -28,7 +27,5 @@ const Flight = connection_1.default.define('flight', {
         type: sequelize_1.DataTypes.INTEGER
     }
 });
-Flight.hasMany(boarding_pass_1.default, { foreignKey: 'flight_id', sourceKey: 'flight_id' });
-boarding_pass_1.default.belongsTo(Flight, { foreignKey: 'flight_id', targetKey: 'flight_id' });
 exports.default = Flight;
-//# sourceMappingURL=flight.js.map
+//# sourceMappingURL=flight%20copy.js.map
