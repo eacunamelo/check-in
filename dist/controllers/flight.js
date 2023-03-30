@@ -13,46 +13,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getFlight = void 0;
-const airplane_1 = __importDefault(require("../models/airplane"));
+const sequelize_1 = require("sequelize");
 const flight_1 = __importDefault(require("../models/flight"));
 const boarding_pass_1 = __importDefault(require("../models/boarding_pass"));
-const passenger_1 = __importDefault(require("../models/passenger"));
-const purchase_1 = __importDefault(require("../models/purchase"));
-const seat_type_1 = __importDefault(require("../models/seat_type"));
 const seat_1 = __importDefault(require("../models/seat"));
 const getFlight = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {
-        const flight = yield flight_1.default.findAll({
-            include: [
-                {
-                    model: airplane_1.default
-                },
-                {
-                    model: boarding_pass_1.default,
-                    include: [
-                        {
-                            model: passenger_1.default
-                        },
-                        {
-                            model: purchase_1.default
-                        },
-                        {
-                            model: seat_type_1.default
-                        },
-                        {
-                            model: seat_1.default
-                        },
-                    ]
-                },
-            ],
-            where: {
-                flight_id: id
-            }
-        });
+        const boarding_pass = yield boarding_pass_1.default.findAll({ where: { boarding_pass_id: 1 } });
+        const flight = yield flight_1.default.findAll({ where: { airplane_id: boarding_pass } });
+        const occupiedSeats = yield boarding_pass_1.default.findAll({ where: { seat_id: { [sequelize_1.Op.not]: null } } });
+        const occupiedSeatsIds = occupiedSeats.map((item) => item.seat_id);
+        const freeSeats = yield seat_1.default.findAll({ where: { seat_id: { [sequelize_1.Op.notIn]: occupiedSeatsIds } } });
+        //agrupar por purchase
+        if (!boarding_pass.seat_id) {
+        }
+        else {
+        }
         res.status(200).json({
             ok: true,
-            flight
+            freeSeats
         });
     }
     catch (error) {

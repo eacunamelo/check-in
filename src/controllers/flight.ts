@@ -13,37 +13,25 @@ export const getFlight = async( req: Request, res: Response ) => {
     const { id }  = req.params;
 
     try {
-        const flight = await Flight.findAll({
-                                            include:[
-                                                {
-                                                    model: Airplane
-                                                },
-                                                {
-                                                    model: Boarding_Pass,
-                                                    include: [
-                                                        {
-                                                            model: Passenger
-                                                        },
-                                                        {
-                                                            model: Purchase
-                                                        },
-                                                        {
-                                                            model: Seat_Type
-                                                        },
-                                                        {
-                                                            model: Seat
-                                                        },
-                                                    ]
-                                                },
-                                            ],
-                                            where: {
-                                                flight_id: id
-                                            }
-                                        });
+
+        const boarding_pass = await Boarding_Pass.findAll({ where : {boarding_pass_id : 1}});
+        const flight = await Flight.findAll({ where : {airplane_id: boarding_pass }});
+        const occupiedSeats = await Boarding_Pass.findAll({ where : {seat_id: {[Op.not]: null}} });
+        const occupiedSeatsIds = occupiedSeats.map((item: any) => item.seat_id);
+        const freeSeats = await Seat.findAll({ where : { seat_id : {[Op.notIn]: occupiedSeatsIds}} });
+
+        //agrupar por purchase
+        if (!boarding_pass.seat_id) {
+            
+                        
+        } else {
+
+        }
+       
         
         res.status(200).json({
             ok:true,
-            flight
+            freeSeats
         });
 
     } catch (error) {
