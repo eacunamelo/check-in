@@ -1,11 +1,7 @@
 Opciones:
     Levantar los modules de node
         npm install
-    Levantar el servidor
-        nodemon dist/app.js
-    Levantar permanentemente el compilador
-        tsc --watch
-    Levanta todos los servicios
+    Levanta el servidor
         npm run dev
     Git
         git add .
